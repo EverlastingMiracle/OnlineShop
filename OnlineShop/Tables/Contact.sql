@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Contacts]
+﻿CREATE TABLE [dbo].[Contact]
 (
 	[Id] INT NOT NULL PRIMARY KEY, 
     [Email] NCHAR(10) NOT NULL, 
