@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[BookCategory] (
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	Category NCHAR(128) NOT NULL,
+	CONSTRAINT UC_BookCategory UNIQUE (Category)
+);

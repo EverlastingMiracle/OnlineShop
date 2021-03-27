@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Tables\BookCategory.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Tables\BookCategory.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="StoredProcedures\" />
   </ItemGroup>
 
