@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "OnlineShop", "OnlineShop\OnlineShop.sqlproj", "{F80086EC-3B2D-4D03-B8FC-8A1F83413665}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookShop", "BookShop\BookShop.csproj", "{D9CF4895-E8A3-45BA-9A68-81AD152E0CF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F80086EC-3B2D-4D03-B8FC-8A1F83413665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F80086EC-3B2D-4D03-B8FC-8A1F83413665}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F80086EC-3B2D-4D03-B8FC-8A1F83413665}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{F80086EC-3B2D-4D03-B8FC-8A1F83413665}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F80086EC-3B2D-4D03-B8FC-8A1F83413665}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F80086EC-3B2D-4D03-B8FC-8A1F83413665}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D9CF4895-E8A3-45BA-9A68-81AD152E0CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9CF4895-E8A3-45BA-9A68-81AD152E0CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9CF4895-E8A3-45BA-9A68-81AD152E0CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9CF4895-E8A3-45BA-9A68-81AD152E0CF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
