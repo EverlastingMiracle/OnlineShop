@@ -1,4 +1,5 @@
 ﻿CREATE DATABASE BookStore 
+GO 
 
 USE BookStore
 GO
@@ -6,7 +7,7 @@ GO
 CREATE TABLE [dbo].[Author]
 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    FirstName NCHAR(128) NOT NULL, 
+	FirstName NCHAR(128) NOT NULL, 
 	LastName NCHAR(128) NOT NULL
 );
 
@@ -44,12 +45,12 @@ INSERT INTO BookCategory (Category) VALUES ('Sci-Fi');
 CREATE TABLE [dbo].[Book]
 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    Name NCHAR(128) NOT NULL, 
-    AuthorId INT, 
-    EditionYear SMALLINT NOT NULL CONSTRAINT CHK_EditionYear_validation CHECK (EditionYear >=1000 AND EditionYear <=3000), 
-    Price MONEY,
+	Name NCHAR(128) NOT NULL, 
+	AuthorId INT, 
+	EditionYear SMALLINT NOT NULL CONSTRAINT CHK_EditionYear_validation CHECK (EditionYear >=1000 AND EditionYear <=3000), 
+	Price MONEY,
 	CategoryId INT,
-    CONSTRAINT FK_BookCategory_To_Book FOREIGN KEY (CategoryId) REFERENCES BookCategory (Id) ON DELETE SET NULL,
+	CONSTRAINT FK_BookCategory_To_Book FOREIGN KEY (CategoryId) REFERENCES BookCategory (Id) ON DELETE SET NULL,
 	CONSTRAINT FK_Author_To_Book FOREIGN KEY (AuthorId) REFERENCES Author(Id) ON DELETE SET NULL
 )
 
@@ -67,9 +68,9 @@ INSERT INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('f
 CREATE TABLE [dbo].[Contact]
 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    Email NCHAR(128) NOT NULL, 
-    Address NCHAR(128) NOT NULL, 
-    PhoneNumber NCHAR(15) NOT NULL
+	Email NCHAR(128) NOT NULL, 
+	Address NCHAR(128) NOT NULL, 
+	PhoneNumber NCHAR(15) NOT NULL
 )
 
 INSERT INTO Contact([Email],[Address],[PhoneNumber]) VALUES('ac.facilisis.facilisis@ornare.edu','P.O. Box 568, 7816 Nec Avenue','040-219-5904'),('at.lacus.Quisque@consequat.net','7939 At, Av.','003-444-5128'),('lobortis.tellus@Sed.org','Ap #245-1456 Maecenas Avenue','021-788-9924'),('libero.est.congue@blanditviverraDonec.edu','236-3188 Non, Avenue','004-804-3860'),('pede@ametornare.com','465-2738 Nascetur Street','054-940-1781'),('hymenaeos.Mauris.ut@estMauriseu.co.uk','465-5628 Lectus Road','098-667-8924'),('Duis.elementum@netusetmalesuada.edu','P.O. Box 668, 5229 Dui Street','029-987-1301'),('luctus.felis@tristiquealiquet.org','1562 Eget Av.','000-168-5818'),('et.malesuada.fames@acmattisornare.org','P.O. Box 263, 4838 Et Street','097-856-9128'),('Aenean.gravida@interdumenimnon.ca','P.O. Box 296, 1622 Porttitor Road','094-000-6778');
@@ -86,10 +87,10 @@ INSERT INTO Contact([Email],[Address],[PhoneNumber]) VALUES('mauris.sagittis.pla
 CREATE TABLE [dbo].[Customer]
 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    FirstName NCHAR(40) NOT NULL, 
-    LastName NCHAR(40) NOT NULL, 
-    Address NCHAR(40) NOT NULL, 
-    Email NCHAR(128) NULL
+	FirstName NCHAR(40) NOT NULL, 
+	LastName NCHAR(40) NOT NULL, 
+	Address NCHAR(40) NOT NULL, 
+	Email NCHAR(128) NULL
 )
 
 INSERT INTO Customer([FirstName],[LastName],[Address],[Email]) VALUES('Colt','Mercer','P.O. Box 716, 4061 Sociosqu Street','iaculis.lacus@consectetuer.com'),('Phillip','Koch','370-6003 Blandit Rd.','lorem@ultricies.co.uk'),('Colette','Bond','P.O. Box 932, 1764 Aliquet Rd.','Sed.congue.elit@vulputatenisi.edu'),('Myles','Taylor','P.O. Box 289, 6959 Ipsum. Rd.','sollicitudin@egetvenenatisa.ca'),('Joan','Randolph','7506 Sem Rd.','eu.elit.Nulla@sitametluctus.org'),('Courtney','Leach','Ap #976-2076 Lacus, Ave','nostra@porttitor.com'),('Lance','Byrd','Ap #267-2573 Amet Avenue','feugiat@Etiamimperdiet.ca'),('Tatiana','Montoya','Ap #657-617 Ornare Av.','ut.mi.Duis@ametfaucibusut.com'),('Joel','Forbes','9105 Quisque Street','arcu.ac.orci@sodalesatvelit.ca'),('Jerry','Black','P.O. Box 806, 1887 Vulputate, St.','libero.Donec@sollicitudinadipiscingligula.edu');
@@ -107,7 +108,7 @@ INSERT INTO Customer([FirstName],[LastName],[Address],[Email]) VALUES('Damon','W
 CREATE TABLE [dbo].[UserCategory]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    [Name] NCHAR(50) NULL
+	[Name] NCHAR(50) NULL
 )
 
 
@@ -116,13 +117,13 @@ INSERT INTO UserCategory([Name]) VALUES('Admin'),('SuperAdmin'),('MegaAdmin'),('
 CREATE TABLE [dbo].[User]
 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    FirstName NCHAR(20) NOT NULL, 
-    LastName NCHAR(20) NOT NULL, 
-    BirthDate DATE NOT NULL, 
-    UserCategoryId INT NOT NULL ,
-    ContactId INT NOT NULL,
-    CONSTRAINT FK_User_To_UserCategory FOREIGN KEY (UserCategoryId) REFERENCES UserCategory(Id),
-    CONSTRAINT FK_User_To_Contact FOREIGN KEY (ContactId) REFERENCES Contact(Id)
+	FirstName NCHAR(20) NOT NULL, 
+	LastName NCHAR(20) NOT NULL, 
+	BirthDate DATE NOT NULL, 
+	UserCategoryId INT NOT NULL ,
+	ContactId INT NOT NULL,
+	CONSTRAINT FK_User_To_UserCategory FOREIGN KEY (UserCategoryId) REFERENCES UserCategory(Id),
+	CONSTRAINT FK_User_To_Contact FOREIGN KEY (ContactId) REFERENCES Contact(Id)
 )
 
 
@@ -140,10 +141,10 @@ INSERT INTO [User]([FirstName],[LastName],[BirthDate],[UserCategoryId],[ContactI
 CREATE TABLE [dbo].[Warehouse]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    [BookId] INT NOT NULL,  
-    [Count] INT NOT NULL,
-    [LastUpdated] DATETIME NOT NULL,
-    CONSTRAINT FK_Warehouse_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id)
+	[BookId] INT NOT NULL,  
+	[Count] INT NOT NULL,
+	[LastUpdated] DATETIME NOT NULL,
+	CONSTRAINT FK_Warehouse_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id)
 )
 
 INSERT INTO Warehouse([BookId],[Count],[LastUpdated]) VALUES(1,7,'03/29/2020'),(2,2,'03/29/2020'),(3,3,'03/29/2020'),(4,7,'03/28/2020'),(5,3,'03/29/2020'),(6,3,'03/28/2020'),(7,2,'03/29/2020'),(8,7,'03/28/2020'),(9,7,'03/28/2020'),(10,4,'03/28/2020');
