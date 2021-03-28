@@ -216,7 +216,7 @@ END
 
 GO
 CREATE VIEW ViewWarehouseReport AS
-SELECT b.Name, bc.Category, a.FirstName + a.LastName AS FullName, w.Count
+SELECT b.Name AS BookName, bc.Category AS BookCategoryName, CONCAT(RTRIM(a.FirstName), ' ', RTRIM(a.LastName)) AS Author, w.Count AS BookCount
 FROM Book AS b 
 LEFT JOIN Author AS a ON a.Id = b.AuthorId
 LEFT JOIN Warehouse AS w ON w.BookId = b.Id
