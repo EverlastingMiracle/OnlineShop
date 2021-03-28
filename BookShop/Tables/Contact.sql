@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Contact]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
-    [Email] NCHAR(10) NOT NULL, 
-    [Address] NCHAR(10) NOT NULL, 
-    [PhoneNumber] NCHAR(15) NOT NULL
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+    Email NCHAR(128) NOT NULL, 
+    Address NCHAR(128) NOT NULL, 
+    PhoneNumber NCHAR(15) NOT NULL
 )
