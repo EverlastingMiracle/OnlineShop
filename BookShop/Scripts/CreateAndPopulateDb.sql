@@ -159,6 +159,31 @@ INSERT INTO Warehouse([BookId],[Count],[LastUpdated]) VALUES(81,5,'03/29/2020'),
 INSERT INTO Warehouse([BookId],[Count],[LastUpdated]) VALUES(91,7,'03/29/2020'),(92,5,'03/29/2020'),(93,1,'03/29/2020'),(94,3,'03/28/2020'),(95,7,'03/29/2020'),(96,5,'03/28/2020'),(97,4,'03/28/2020'),(98,2,'03/28/2020'),(99,4,'03/29/2020'),(100,3,'03/29/2020');
 
 
+CREATE TABLE [dbo].[Order]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+    [BookId] INT NOT NULL,
+    [Count] INT NOT NULL, 
+    [CustomerId] INT NOT NULL,
+	CONSTRAINT FK_Order_to_Customer FOREIGN KEY (CustomerId) REFERENCES [Customer](Id), 
+	CONSTRAINt FK_Order_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id)
+)
+
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(49,4,7),(3,2,26),(19,1,30),(7,3,15),(41,4,66),(63,2,4),(89,5,79),(18,3,99),(26,5,68),(48,3,49);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(53,4,61),(13,3,52),(17,1,87),(37,4,99),(14,3,46),(49,1,35),(62,4,73),(62,5,9),(75,5,58),(45,1,36);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(37,5,14),(88,1,68),(85,2,77),(85,3,46),(56,5,48),(78,2,1),(32,3,70),(13,4,55),(98,3,65),(9,5,41);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(48,1,84),(72,4,79),(66,4,54),(58,5,51),(23,5,39),(29,5,81),(2,3,19),(95,4,65),(66,5,62),(67,4,73);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(55,5,85),(21,5,84),(41,3,91),(35,5,8),(6,4,10),(59,1,28),(7,2,69),(3,4,77),(47,2,17),(92,4,18);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(96,5,34),(75,3,63),(96,1,57),(34,2,69),(10,3,89),(32,3,17),(78,5,50),(66,2,60),(1,5,35),(68,3,59);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(15,1,16),(1,5,79),(40,4,96),(41,1,44),(14,5,54),(93,1,88),(74,2,72),(47,2,28),(72,4,18),(90,1,8);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(14,3,84),(80,3,34),(96,3,6),(75,3,78),(45,2,78),(76,5,88),(2,5,76),(49,4,2),(4,5,96),(59,3,67);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(2,1,29),(65,1,88),(25,2,99),(41,3,21),(82,5,24),(70,1,60),(16,1,88),(98,4,36),(82,4,31),(45,5,51);
+INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(83,1,11),(75,3,21),(69,2,37),(85,1,95),(9,3,80),(24,5,55),(86,3,77),(58,2,44),(19,4,51),(42,4,81);
+
+
+
+
+
 --Drop table Warehouse;
 --Drop table User;
 --Drop table UserCategory;
@@ -186,3 +211,13 @@ BEGIN
 	INSERT INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('felis orci, adipiscing',1,1991,'$39.35',6),('inceptos hymenaeos. Mauris',25,1962,'$33.42',1),('nascetur ridiculus mus.',48,2019,'$73.89',9),('diam eu dolor',80,2002,'$69.84',9),('tellus sem mollis',25,1971,'$94.13',7),('ullamcorper eu, euismod',16,1981,'$1.95',2),('Vivamus molestie dapibus',53,1959,'$27.51',6),('ornare placerat, orci',97,2011,'$97.10',1),('ac turpis egestas.',68,2016,'$35.29',6),('rutrum urna, nec',61,1973,'$48.41',9);
 	SET @count = @count - 100;
 END
+
+
+
+GO
+CREATE VIEW ViewWarehouseReport AS
+SELECT b.Name, bc.Category, a.FirstName + a.LastName AS FullName, w.Count
+FROM Book AS b 
+LEFT JOIN Author AS a ON a.Id = b.AuthorId
+LEFT JOIN Warehouse AS w ON w.BookId = b.Id
+LEFT JOIN BookCategory AS bc ON  bc.Id = b.CategoryId
