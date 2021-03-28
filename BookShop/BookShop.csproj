@@ -12,8 +12,4 @@
     <Compile Include="Tables\BookCategory.sql" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="StoredProcedures\" />
-  </ItemGroup>
-
 </Project>
