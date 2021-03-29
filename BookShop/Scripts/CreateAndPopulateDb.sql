@@ -221,3 +221,22 @@ FROM Book AS b
 LEFT JOIN Author AS a ON a.Id = b.AuthorId
 LEFT JOIN Warehouse AS w ON w.BookId = b.Id
 LEFT JOIN BookCategory AS bc ON  bc.Id = b.CategoryId
+
+insert INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('consequat dolor vitae',7,2012,'$16.30',6)
+
+
+--DROP TRIGGER Book_INSERT
+
+GO
+CREATE TRIGGER Book_INSERT
+ON Book
+AFTER INSERT
+AS
+BEGIN
+UPDATE Warehouse
+SET Count = Count + 1, LastUpdated = GETDATE()
+from inserted AS i 
+where i.Id = Warehouse.BookId
+END;
+
+insert INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('consequat dolor vitae',7,2012,'$16.30',6)
