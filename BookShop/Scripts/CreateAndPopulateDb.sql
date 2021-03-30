@@ -196,37 +196,37 @@ CREATE TABLE [dbo].[Sales]
 
 
 GO
-CREATE TRIGGER Sales_INSERT
+CREATE TRIGGER t_sales_insert
 ON Sales
 AFTER INSERT
 AS
-UPDATE Sales 
-SET Sales.Cost = Book.Price * Sales.Count
-FROM inserted, Sales JOIN Book ON Book.Id = Sales.BookId
-WHERE inserted.Id = Sales.Id;
+BEGIN
+	UPDATE Sales 
+		SET Sales.Cost = Book.Price * Sales.Count FROM inserted, 
+		Sales JOIN Book ON Book.Id = Sales.BookId
+	WHERE inserted.Id = Sales.Id;
 
-DECLARE @insertedCount INT;
-DECLARE @warehouseCount INT;
-DECLARE @insertedId INT;
-DECLARE @insertedBookID INT;
-SET @insertedBookID = (SELECT BookId FROM inserted)
-SET @insertedId = (SELECT inserted.Id FROM inserted)
-SET @warehouseCount = (SELECT Warehouse.Count
-FROM Warehouse  JOIN inserted
-ON Warehouse.BookId = inserted.BookId)
-SET @insertedCount = (SELECT inserted.Count FROM inserted)
-IF (@insertedCount <= @warehouseCount)
-	BEGIN
-		UPDATE Warehouse
-		SET Count = Count - @insertedCount, LastUpdated = GETDATE()
-		WHERE Warehouse.BookId = @insertedBookID;
-	END;
-ELSE 
-	BEGIN
-		DELETE FROM Sales
-		WHERE Id = @insertedId
-	END;
+	DECLARE @insertedCount INT, @warehouseCount INT, @insertedId INT, @insertedBookID INT;
 
+	SET @insertedBookID = (SELECT BookId FROM inserted)
+	SET @insertedId = (SELECT inserted.Id FROM inserted)
+	SET @warehouseCount = (SELECT Warehouse.Count
+		FROM Warehouse JOIN inserted
+		ON Warehouse.BookId = inserted.BookId)
+
+	SET @insertedCount = (SELECT inserted.Count FROM inserted)
+	IF (@insertedCount <= @warehouseCount)
+		BEGIN
+			UPDATE Warehouse
+			SET Count = Count - @insertedCount, LastUpdated = GETDATE()
+			WHERE Warehouse.BookId = @insertedBookID;
+		END;
+	ELSE 
+		BEGIN
+			DELETE FROM Sales
+			WHERE Id = @insertedId
+		END;
+END;
 --drop trigger Sales_INSERT;
 --Drop table Sales
 --Drop table [Order];
