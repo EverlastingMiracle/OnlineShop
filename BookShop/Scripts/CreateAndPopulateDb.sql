@@ -51,7 +51,8 @@ CREATE TABLE [dbo].[Book]
 	Price MONEY,
 	CategoryId INT,
 	CONSTRAINT FK_BookCategory_To_Book FOREIGN KEY (CategoryId) REFERENCES BookCategory (Id) ON DELETE SET NULL,
-	CONSTRAINT FK_Author_To_Book FOREIGN KEY (AuthorId) REFERENCES Author(Id) ON DELETE SET NULL
+	CONSTRAINT FK_Author_To_Book FOREIGN KEY (AuthorId) REFERENCES Author(Id) ON DELETE SET NULL,
+	CONSTRAINT UC_Book UNIQUE (Name, AuthorId, EditionYear)
 )
 
 INSERT INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('consequat dolor vitae',7,2012,'$16.30',6),('congue a, aliquet',53,1962,'$74.21',1),('Aliquam erat volutpat.',81,2000,'$86.63',8),('Phasellus ornare. Fusce',99,1988,'$47.17',9),('Nunc pulvinar arcu',61,1994,'$80.00',5),('nibh lacinia orci,',44,2005,'$76.58',2),('urna, nec luctus',30,2010,'$33.17',1),('nec ante blandit',30,2005,'$82.81',8),('eu tellus eu',76,2021,'$12.39',8),('fringilla, porttitor vulputate,',38,2016,'$37.75',1);
@@ -181,9 +182,7 @@ INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(2,1,29),(65,1,88),(25,
 INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(83,1,11),(75,3,21),(69,2,37),(85,1,95),(9,3,80),(24,5,55),(86,3,77),(58,2,44),(19,4,51),(42,4,81);
 
 
-
-
-
+--Drop table [Order];
 --Drop table Warehouse;
 --Drop table User;
 --Drop table UserCategory;
@@ -222,21 +221,5 @@ LEFT JOIN Author AS a ON a.Id = b.AuthorId
 LEFT JOIN Warehouse AS w ON w.BookId = b.Id
 LEFT JOIN BookCategory AS bc ON  bc.Id = b.CategoryId
 
-insert INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('consequat dolor vitae',7,2012,'$16.30',6)
 
 
---DROP TRIGGER Book_INSERT
-
-GO
-CREATE TRIGGER Book_INSERT
-ON Book
-AFTER INSERT
-AS
-BEGIN
-UPDATE Warehouse
-SET Count = Count + 1, LastUpdated = GETDATE()
-from inserted AS i 
-where i.Id = Warehouse.BookId
-END;
-
-insert INTO Book([Name],[AuthorId],[EditionYear],[Price],[CategoryId]) VALUES('consequat dolor vitae',7,2012,'$16.30',6)
