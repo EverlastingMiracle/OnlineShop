@@ -182,6 +182,71 @@ INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(2,1,29),(65,1,88),(25,
 INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(83,1,11),(75,3,21),(69,2,37),(85,1,95),(9,3,80),(24,5,55),(86,3,77),(58,2,44),(19,4,51),(42,4,81);
 
 
+CREATE TABLE [dbo].[Sales]
+(
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[BookId] INT NOT NULL,
+	[Count] INT NOT NULL,
+	[Date] DATETIME NOT NULL,
+	Cost MONEY Null,
+	CONSTRAINT FK_Sales_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id),
+	CONSTRAINT CK_Count CHECK (Count > 0)
+ )
+
+INSERT INTO [Sales] ([BookId], [Count], [Date]) VALUES(1,13,'01/22/1993');
+
+
+go
+CREATE TRIGGER Cost_INSERT
+ON Sales
+AFTER INSERT
+AS
+UPDATE Sales 
+Set Sales.Cost = Book.Price * Sales.Count
+From inserted, Sales JOIN Book ON Book.Id = Sales.BookId
+where inserted.Id = Sales.Id
+
+
+go
+CREATE TRIGGER Sales_INSERT
+ON Sales
+AFTER INSERT
+AS
+DECLARE @insertedCount INT;
+DECLARE @warehouseCount INT;
+DECLARE @insertedId INT;
+DECLARE @insertedBookID INT;
+SET @insertedBookID = (Select BookId from inserted)
+SET @insertedId = (SELECT inserted.Id from inserted)
+SET @warehouseCount = (Select Warehouse.Count
+From Warehouse  JOIN inserted
+ON Warehouse.BookId = inserted.BookId)
+
+Set @insertedCount = (Select inserted.Count from inserted)
+
+IF (@insertedCount < @warehouseCount)
+	BEGIN
+	UPDATE Warehouse
+	SET [Count] = [Count] - @insertedCount, LastUpdated = GETDATE()
+	WHERE Warehouse.BookId = @insertedBookID;
+	END;
+ELSE 
+	BEGIN
+	DELETE FROM Sales
+	where Id = @insertedId
+	END;
+
+
+	
+
+
+
+--drop trigger Sales_INSERT;
+
+--drop trigger Cost_INSERT
+
+
+--Drop table Sales
 --Drop table [Order];
 --Drop table Warehouse;
 --Drop table User;
