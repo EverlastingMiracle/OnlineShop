@@ -108,8 +108,8 @@ INSERT INTO Customer([FirstName],[LastName],[Address],[Email]) VALUES('Damon','W
 
 CREATE TABLE [dbo].[UserCategory]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-	[Name] NCHAR(50) NULL
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+	Name NCHAR(50) NULL
 )
 
 
@@ -141,11 +141,11 @@ INSERT INTO [User]([FirstName],[LastName],[BirthDate],[UserCategoryId],[ContactI
 
 CREATE TABLE [dbo].[Warehouse]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-	[BookId] INT NOT NULL,  
-	[Count] INT NOT NULL,
-	[LastUpdated] DATETIME NOT NULL,
-	CONSTRAINT FK_Warehouse_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id)
+	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+	BookId INT NOT NULL,  
+	Count INT NOT NULL,
+	LastUpdated DATETIME NOT NULL,
+	CONSTRAINT FK_Warehouse_To_Book FOREIGN KEY (BookId) REFERENCES Book(Id)
 )
 
 INSERT INTO Warehouse([BookId],[Count],[LastUpdated]) VALUES(1,7,'03/29/2020'),(2,2,'03/29/2020'),(3,3,'03/29/2020'),(4,7,'03/28/2020'),(5,3,'03/29/2020'),(6,3,'03/28/2020'),(7,2,'03/29/2020'),(8,7,'03/28/2020'),(9,7,'03/28/2020'),(10,4,'03/28/2020');
@@ -162,12 +162,12 @@ INSERT INTO Warehouse([BookId],[Count],[LastUpdated]) VALUES(91,7,'03/29/2020'),
 
 CREATE TABLE [dbo].[Order]
 (
-    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
-    [BookId] INT NOT NULL,
-    [Count] INT NOT NULL, 
-    [CustomerId] INT NOT NULL,
-	CONSTRAINT FK_Order_to_Customer FOREIGN KEY (CustomerId) REFERENCES [Customer](Id), 
-	CONSTRAINt FK_Order_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id)
+    Id INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
+    BookId INT NOT NULL,
+    Count INT NOT NULL, 
+    CustomerId INT NOT NULL,
+	CONSTRAINT FK_Order_to_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id), 
+	CONSTRAINt FK_Order_To_Book FOREIGN KEY (BookId) REFERENCES Book(Id)
 )
 
 INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(49,4,7),(3,2,26),(19,1,30),(7,3,15),(41,4,66),(63,2,4),(89,5,79),(18,3,99),(26,5,68),(48,3,49);
@@ -185,67 +185,49 @@ INSERT INTO [Order]([BookId],[Count],[CustomerId]) VALUES(83,1,11),(75,3,21),(69
 CREATE TABLE [dbo].[Sales]
 (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[BookId] INT NOT NULL,
-	[Count] INT NOT NULL,
-	[Date] DATETIME NOT NULL,
+	BookId INT NOT NULL,
+	Count INT NOT NULL,
+	Date DATETIME NOT NULL,
 	Cost MONEY Null,
-	CONSTRAINT FK_Sales_To_Book FOREIGN KEY (BookId) REFERENCES [Book](Id),
+	CONSTRAINT FK_Sales_To_Book FOREIGN KEY (BookId) REFERENCES Book(Id),
 	CONSTRAINT CK_Count CHECK (Count > 0)
  )
 
-INSERT INTO [Sales] ([BookId], [Count], [Date]) VALUES(1,13,'01/22/1993');
 
 
-go
-CREATE TRIGGER Cost_INSERT
-ON Sales
-AFTER INSERT
-AS
-UPDATE Sales 
-Set Sales.Cost = Book.Price * Sales.Count
-From inserted, Sales JOIN Book ON Book.Id = Sales.BookId
-where inserted.Id = Sales.Id
-
-
-go
+GO
 CREATE TRIGGER Sales_INSERT
 ON Sales
 AFTER INSERT
 AS
+UPDATE Sales 
+SET Sales.Cost = Book.Price * Sales.Count
+FROM inserted, Sales JOIN Book ON Book.Id = Sales.BookId
+WHERE inserted.Id = Sales.Id;
+
 DECLARE @insertedCount INT;
 DECLARE @warehouseCount INT;
 DECLARE @insertedId INT;
 DECLARE @insertedBookID INT;
-SET @insertedBookID = (Select BookId from inserted)
-SET @insertedId = (SELECT inserted.Id from inserted)
-SET @warehouseCount = (Select Warehouse.Count
-From Warehouse  JOIN inserted
+SET @insertedBookID = (SELECT BookId FROM inserted)
+SET @insertedId = (SELECT inserted.Id FROM inserted)
+SET @warehouseCount = (SELECT Warehouse.Count
+FROM Warehouse  JOIN inserted
 ON Warehouse.BookId = inserted.BookId)
-
-Set @insertedCount = (Select inserted.Count from inserted)
-
-IF (@insertedCount < @warehouseCount)
+SET @insertedCount = (SELECT inserted.Count FROM inserted)
+IF (@insertedCount <= @warehouseCount)
 	BEGIN
-	UPDATE Warehouse
-	SET [Count] = [Count] - @insertedCount, LastUpdated = GETDATE()
-	WHERE Warehouse.BookId = @insertedBookID;
+		UPDATE Warehouse
+		SET Count = Count - @insertedCount, LastUpdated = GETDATE()
+		WHERE Warehouse.BookId = @insertedBookID;
 	END;
 ELSE 
 	BEGIN
-	DELETE FROM Sales
-	where Id = @insertedId
+		DELETE FROM Sales
+		WHERE Id = @insertedId
 	END;
 
-
-	
-
-
-
 --drop trigger Sales_INSERT;
-
---drop trigger Cost_INSERT
-
-
 --Drop table Sales
 --Drop table [Order];
 --Drop table Warehouse;
