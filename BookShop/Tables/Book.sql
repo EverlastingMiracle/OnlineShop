@@ -7,5 +7,6 @@
     Price MONEY,
 	CategoryId INT,
     CONSTRAINT FK_BookCategory_To_Book FOREIGN KEY (CategoryId) REFERENCES BookCategory (Id) ON DELETE SET NULL,
-	CONSTRAINT FK_Author_To_Book FOREIGN KEY (AuthorId) REFERENCES Author(Id) ON DELETE SET NULL
+	CONSTRAINT FK_Author_To_Book FOREIGN KEY (AuthorId) REFERENCES Author(Id) ON DELETE SET NULL,
+    CONSTRAINT UC_Book UNIQUE (Name, AuthorId, EditionYear)
 )
